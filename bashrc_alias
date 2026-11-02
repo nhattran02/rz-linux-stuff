@@ -1,0 +1,29 @@
+
+K_SRC_PATH=~/rz_linux-cip
+K_BUILD_PATH=~/rz_linux-cip-build
+
+kbuild() {
+    cd "$K_SRC_PATH" || return 1
+    . /opt/rz-bsp-plus/5.0.11/environment-setup-cortexa55-poky-linux
+    make O="$K_BUILD_PATH" defconfig
+    make O="$K_BUILD_PATH" -j$(nproc)
+}
+
+ybuild() {
+    cd ~/rz-yocto || return 1
+    source poky/oe-init-build-env
+    bitbake core-image-minimal
+}
+
+kcopy() {
+    sudo rm -rf /srv/tftp/*
+    sudo cp \
+        "$K_BUILD_PATH/arch/arm64/boot/Image" \
+        "$K_BUILD_PATH/arch/arm64/boot/dts/renesas/r9a07g044l2-smarc.dtb" \
+        "$K_BUILD_PATH/arch/arm64/boot/dts/renesas/r9a09g056n48-rzv2n-evk.dtb" \
+        "$K_BUILD_PATH/arch/arm64/boot/dts/renesas/r9a09g047e57-smarc.dtb" \
+        "$K_BUILD_PATH/arch/arm64/boot/dts/renesas/r9a08g045s33-smarc.dtb" \
+        "$K_BUILD_PATH/arch/arm64/boot/dts/mybrd/mybrd.dtb" \
+        "$K_BUILD_PATH/arch/arm64/boot/dts/renesas/r9a08g045s33-smarc-pmod1-type-3a.dtb" \
+        /srv/tftp/
+}
