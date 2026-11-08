@@ -1,0 +1,2 @@
+bootargs=console=ttyS0,115200n8 earlycon=omap8250,mmio32,0x44e09000 root=/dev/nfs rw nfsroot=192.168.1.3:/nfs/bbb,nfsvers=3,tcp ip=192.168.1.5:192.168.1.3:192.168.1.1:255.255.255.0::eth0:off rootwait panic=1
+bootcmd=tftp 0x82000000 zImage; tftp 0x88000000 tisoc-bbb.dtb; bootz 0x82000000 - 0x88000000
