@@ -26,36 +26,36 @@ kcopy_modules() {
 
 kbuild_rz() {
     cd "$K_RZ_SRC_PATH" || return 1
-    . /opt/rz-bsp-plus/5.0.11/environment-setup-cortexa55-poky-linux
-    make O="$K_RZ_BUILD_PATH" defconfig
-    make O="$K_RZ_BUILD_PATH" -j$(nproc)
+    . /opt/rz-bsp-plus/5.0.11/environment-setup-cortexa55-poky-linux || return 1
+    make O="$K_RZ_BUILD_PATH" defconfig || return 1
+    make O="$K_RZ_BUILD_PATH" -j$(nproc) || return 1
 
     # Install modules into a temporary folder: ~/rz_linux-cip-build/modroot
     rm -rf "$K_RZ_BUILD_PATH/modroot"
     make O="$K_RZ_BUILD_PATH" \
         INSTALL_MOD_PATH="$K_RZ_BUILD_PATH/modroot" \
         INSTALL_MOD_STRIP=1 \
-        modules_install
+        modules_install || return 1
 }
 
 kbuild_bbb() {
     cd "$K_BBB_SRC_PATH" || return 1
-    make O="$K_BBB_BUILD_PATH" ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- omap2plus_defconfig
-    make O="$K_BBB_BUILD_PATH" ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- -j$(nproc)
+    make O="$K_BBB_BUILD_PATH" ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- omap2plus_defconfig || return 1
+    make O="$K_BBB_BUILD_PATH" ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- -j$(nproc) || return 1
 }
 
 kbuild_ml() {
     cd "$K_ML_SRC_PATH" || return 1
-    . /opt/rz-bsp-plus/5.0.11/environment-setup-cortexa55-poky-linux
-    make O="$K_ML_BUILD_PATH" defconfig
-    make O="$K_ML_BUILD_PATH" -j$(nproc)
+    . /opt/rz-bsp-plus/5.0.11/environment-setup-cortexa55-poky-linux || return 1
+    make O="$K_ML_BUILD_PATH" defconfig || return 1
+    make O="$K_ML_BUILD_PATH" -j$(nproc) || return 1
 
     # Install modules into a temporary folder: ~/linux-build/modroot
     rm -rf "$K_ML_BUILD_PATH/modroot"
     make O="$K_ML_BUILD_PATH" \
         INSTALL_MOD_PATH="$K_ML_BUILD_PATH/modroot" \
         INSTALL_MOD_STRIP=1 \
-        modules_install
+        modules_install || return 1
 }
 
 kcopy_ml() {
